@@ -1,16 +1,21 @@
-import { extendObservable } from "mobx";
+import { extendObservable, toJS } from "mobx";
 
 import Builder from "./Builder";
 import FakeConnection from "./Connection/FakeConnection";
 import { User } from "../../Models";
+import ModelBuilder from "./ModelBuilder";
+let connection = new FakeConnection();
 
 // import { observer } from "mobx-react";
 export default abstract class Model {
   static entity: string | null = null;
-
+  modelBuilder: ModelBuilder;
   [key: string]: any;
 
   constructor() {
+    const builderObj = new Builder(connection);
+
+    this.modelBuilder = new ModelBuilder(Model, builderObj);
     return new Proxy(this, {
       set: function(obj, prop: any, value, receiver: any) {
         if (!obj[prop]) {
@@ -31,20 +36,24 @@ export default abstract class Model {
     });
   }
 
-  save() {}
+  save() {
+    const toJS = this.toJS();
+
+    console.log(toJS);
+    // console.log(await this.modelBuilder.insert(toJS));
+    return this.modelBuilder.insert(toJS);
+  }
 
   static async findById(id: string) {
-    if (this.entity) {
-      // console.log(Model.entity, this.entity, "entity ZZZ");
-      Model.entity = this.entity;
-      let builder = new ModelBuilder(Model);
-
-      // console.log(builder.where, "builder here");
-      var obj = await builder.where("id", "=", id);
-
-      // console.log(JSON.stringify(obj), "hello");
-      return this.fromJS(obj);
-    } else return null;
+    // if (this.entity) {
+    //   // console.log(Model.entity, this.entity, "entity ZZZ");
+    //   Model.entity = this.entity;
+    //   // let builder = new ModelBuilder(Model);
+    //   // console.log(builder.where, "builder here");
+    //   var obj = await builder.where("id", "=", id);
+    //   // console.log(JSON.stringify(obj), "hello");
+    //   return this.fromJS(obj);
+    // } else return null;
   }
 
   static fromJS(obj: any) {
@@ -67,5 +76,16 @@ export default abstract class Model {
     for (var i in obj) {
       this[i] = obj[i];
     }
+  }
+
+  toJS() {
+    let obj = {};
+    for (var i in this) {
+      if (this.constructor.fillable.indexOf(i) > -1) {
+        obj[i] = toJS(this[i]);
+      }
+    } // return fillable property
+    return obj;
+    // console.log(obj, "obj here");
   }
 }
