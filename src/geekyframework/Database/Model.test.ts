@@ -19,6 +19,20 @@ test("Basic set and get", () => {
   expect(user.name).toBe("Sanket");
 });
 
+test("Basic save", async () => {
+  var user = new User();
+  user.name = "Sanket";
+
+  const userObj = await user.save();
+
+  console.log(userObj.name, "hello userObj");
+  // console.log(user.name, user.where(), "fillable");
+  // user.password = "Sanket";
+  // console.log("ZZZZZ", user.where("id", "=", 2));
+
+  // expect(user.name).toBe("Sanket");
+});
+
 test("Model.findById", async () => {
   // var user = await User.findById("5");
   // console.log(user, "heelo here");
