@@ -6,15 +6,15 @@ class User extends Model {
   protected static hidden = ["password"];
 }
 
-test("Basic set and get", () => {
-  var user = new User();
-  user.name = "Sanket";
-  expect(user.name).toBe("Sanket");
-});
+// test("Basic set and get", () => {
+//   var user = new User();
+//   user.name = "Sanket";
+//   expect(user.name).toBe("Sanket");
+// });
 
-test("Model.findById", async () => {
-  var user = await User.findById("5");
-  expect(user.id).toBe(5);
-});
+// test("Model.findById", async () => {
+//   var user = await User.findById("5");
+//   expect(user.id).toBe(5);
+// });
 
 test("Model: Save Interceptor", async () => {});
