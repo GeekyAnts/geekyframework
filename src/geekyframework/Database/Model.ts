@@ -4,18 +4,21 @@ import Builder from "./Builder";
 import FakeConnection from "./Connection/FakeConnection";
 import { User } from "../../Models";
 import ModelBuilder from "./ModelBuilder";
-let connection = new FakeConnection();
+import ConnectionInterface from "./Connection/ConnectionInterface";
 
 // import { observer } from "mobx-react";
 export default abstract class Model {
   static entity: string | null = null;
   modelBuilder: ModelBuilder;
+  connection: ConnectionInterface;
   [key: string]: any;
 
   constructor() {
-    const builderObj = new Builder(connection);
+    this.connection = new FakeConnection();
+    this.initModelBuilder();
+    // const builderObj = new Builder(this.connection);
+    // this.modelBuilder = new ModelBuilder(Model, builderObj);
 
-    this.modelBuilder = new ModelBuilder(Model, builderObj);
     return new Proxy(this, {
       set: function(obj, prop: any, value, receiver: any) {
         if (!obj[prop]) {
@@ -36,6 +39,14 @@ export default abstract class Model {
     });
   }
 
+  initModelBuilder() {
+    const builderObj = new Builder(this.connection);
+    this.modelBuilder = new ModelBuilder(Model, builderObj);
+  }
+  setConnection(connection: ConnectionInterface) {
+    this.connection = connection;
+    this.initModelBuilder();
+  }
   save() {
     const toJS = this.toJS();
 
@@ -81,7 +92,10 @@ export default abstract class Model {
   toJS() {
     let obj = {};
     for (var i in this) {
-      if (this.constructor.fillable.indexOf(i) > -1) {
+      if (
+        this.constructor.fillable &&
+        this.constructor.fillable.indexOf(i) > -1
+      ) {
         obj[i] = toJS(this[i]);
       }
     } // return fillable property

@@ -1,6 +1,9 @@
 import Model from "./Model";
 import { isObservable } from "mobx";
 
+import FakeConnection from "./Connection/FakeConnection";
+let connection = new FakeConnection();
+
 class User extends Model {
   static entity = "user";
   protected static fillable = ["name"];
@@ -9,6 +12,7 @@ class User extends Model {
 
 test("Basic set and get", () => {
   var user = new User();
+  user.setConnection(connection);
   // console.log("entitys", User.fillable);
   user.name = "Sanket";
 
@@ -21,8 +25,9 @@ test("Basic set and get", () => {
 
 test("Basic save", async () => {
   var user = new User();
-  user.name = "Sanket";
+  user.setConnection(connection);
 
+  user.name = "Sanket";
   const userObj = await user.save();
 
   console.log(userObj.name, "hello userObj");
