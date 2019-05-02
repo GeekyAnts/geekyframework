@@ -1,13 +1,41 @@
 import React from "react";
-import { inject } from "mobx-react";
+import { inject, observer } from "mobx-react";
 
+import Model from "../geekyframework/Database/Model";
+import FirestoreConnection from "../geekyframework/Database/Connection/Firestore";
 import HomeScreen from "./Home";
 import PostScreen from "./Post";
-
+class User extends Model {
+  static fillable = ["name"];
+  entity = "user";
+}
 class Router extends React.Component {
   state = {
     currentScreen: "post"
   };
+  user;
+  constructor() {
+    super();
+
+    this.user = new User();
+
+    let firebaseConnection = new FirestoreConnection({
+      apiKey: "AIzaSyCnRxZIHrZQ9JyXxkp8bR9oPWsI84kNnVg",
+      authDomain: "geekyframework.firebaseapp.com",
+      databaseURL: "https://geekyframework.firebaseio.com",
+      projectId: "geekyframework",
+      storageBucket: "geekyframework.appspot.com",
+      messagingSenderId: "1028118111860"
+    });
+
+    this.user.setConnection(firebaseConnection);
+    this.user.name = "Suraj";
+
+    setTimeout(() => {
+      this.user.name = "something";
+      this.user.save();
+    }, 2000);
+  }
 
   render() {
     return (
@@ -53,7 +81,7 @@ class Router extends React.Component {
           </div>
         </nav>
         <div style={{ height: "20px" }} />
-
+        <div> {this.user.name}</div>
         {this.state.currentScreen == "home" ? <HomeScreen /> : null}
         {this.state.currentScreen == "post" ? <PostScreen /> : null}
       </>
@@ -61,4 +89,4 @@ class Router extends React.Component {
   }
 }
 
-export default inject("app")(Router);
+export default inject("app")(observer(Router));

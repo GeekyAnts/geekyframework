@@ -3,7 +3,14 @@ import FakeConnection from "./Connection/FakeConnection";
 import FirestoreConnection from "./Connection/Firestore";
 
 // let connection = new FakeConnection();
-let firebaseConnection = new FirestoreConnection();
+let firebaseConnection = new FirestoreConnection({
+  apiKey: "AIzaSyCnRxZIHrZQ9JyXxkp8bR9oPWsI84kNnVg",
+  authDomain: "geekyframework.firebaseapp.com",
+  databaseURL: "https://geekyframework.firebaseio.com",
+  projectId: "geekyframework",
+  storageBucket: "geekyframework.appspot.com",
+  messagingSenderId: "1028118111860"
+});
 let builder = new Builder(firebaseConnection);
 
 // test("Builder: Test insert()", async () => {

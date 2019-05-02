@@ -15,7 +15,9 @@ export default abstract class Model {
 
   constructor() {
     this.connection = new FakeConnection();
-    this.initModelBuilder();
+    const builderObj = new Builder(this.connection);
+    this.modelBuilder = new ModelBuilder(Model, builderObj);
+    // this.initModelBuilder();
     // const builderObj = new Builder(this.connection);
     // this.modelBuilder = new ModelBuilder(Model, builderObj);
 
@@ -41,7 +43,12 @@ export default abstract class Model {
 
   initModelBuilder() {
     const builderObj = new Builder(this.connection);
+    console.log(this.entity, "entity");
+    Model.entity = this.entity;
     this.modelBuilder = new ModelBuilder(Model, builderObj);
+
+    // console.log(this.constructor, "hello entity");
+    // this.modelBuilder.from(Model.entity);
   }
   setConnection(connection: ConnectionInterface) {
     this.connection = connection;
@@ -68,14 +75,14 @@ export default abstract class Model {
   }
 
   static fromJS(obj: any) {
-    // let instance = new self();
+    // let instance = new this();
     // instance.fill(obj);
     // return instance;
   }
 
   static fromJSArray(array: any) {
-    let newArray = [];
-    array.forEach(obj => {
+    let newArray: any = [];
+    array.forEach((obj: any) => {
       let instance = this.fromJS(obj);
       newArray.push(instance);
     });
@@ -90,11 +97,11 @@ export default abstract class Model {
   }
 
   toJS() {
-    let obj = {};
+    let obj: any = {};
     for (var i in this) {
       if (
-        this.constructor.fillable &&
-        this.constructor.fillable.indexOf(i) > -1
+        (this as any).constructor["fillable"] &&
+        (this as any).constructor["fillable"].indexOf(i) > -1
       ) {
         obj[i] = toJS(this[i]);
       }
