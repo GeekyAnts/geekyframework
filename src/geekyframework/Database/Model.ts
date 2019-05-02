@@ -1,19 +1,10 @@
-class ModelBuilder {
-  entity: string | null = null;
-  constructor(entity: string | null) {
-    this.entity = entity;
-  }
-  async findById(id: string) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve({
-          id: 5
-        });
-      }, 1000);
-    });
-  }
-}
+import { extendObservable } from "mobx";
 
+import Builder from "./Builder";
+import FakeConnection from "./Connection/FakeConnection";
+import { User } from "../../Models";
+
+// import { observer } from "mobx-react";
 export default abstract class Model {
   static entity: string | null = null;
 
@@ -22,7 +13,11 @@ export default abstract class Model {
   constructor() {
     return new Proxy(this, {
       set: function(obj, prop: any, value, receiver: any) {
-        obj[prop] = value;
+        if (!obj[prop]) {
+          extendObservable(obj, { [prop]: value });
+        } else {
+          obj[prop] = value;
+        }
         return true;
       },
       get: function(obj, prop: any) {
@@ -40,8 +35,14 @@ export default abstract class Model {
 
   static async findById(id: string) {
     if (this.entity) {
-      let builder = new ModelBuilder(this.entity);
-      var obj = await builder.findById(id);
+      // console.log(Model.entity, this.entity, "entity ZZZ");
+      Model.entity = this.entity;
+      let builder = new ModelBuilder(Model);
+
+      // console.log(builder.where, "builder here");
+      var obj = await builder.where("id", "=", id);
+
+      // console.log(JSON.stringify(obj), "hello");
       return this.fromJS(obj);
     } else return null;
   }
@@ -52,7 +53,17 @@ export default abstract class Model {
     // return instance;
   }
 
+  static fromJSArray(array: any) {
+    let newArray = [];
+    array.forEach(obj => {
+      let instance = this.fromJS(obj);
+      newArray.push(instance);
+    });
+    return newArray;
+  }
+
   fill(obj: any) {
+    // console.log(this.entity, "fillable here");
     for (var i in obj) {
       this[i] = obj[i];
     }
