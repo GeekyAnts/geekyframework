@@ -8,13 +8,15 @@ class User extends Model {
 }
 
 test("Basic set and get", () => {
-  // var user = new User();
-  // // console.log("entitys", User.fillable);
-  // user.name = "Sanket";
-  // //console.log(user.name, user.where(), "fillable");
-  // // user.password = "Sanket";
-  // // console.log("ZZZZZ", user.where("id", "=", 2));
-  // expect(user.name).toBe("Sanket");
+  var user = new User();
+  // console.log("entitys", User.fillable);
+  user.name = "Sanket";
+
+  // console.log(user.name, user.where(), "fillable");
+  // user.password = "Sanket";
+  // console.log("ZZZZZ", user.where("id", "=", 2));
+
+  expect(user.name).toBe("Sanket");
 });
 
 test("Model.findById", async () => {

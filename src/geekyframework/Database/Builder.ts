@@ -1,4 +1,5 @@
 import ConnectionInterface from "./Connection/ConnectionInterface";
+import { isArray } from "util";
 
 export default class Builder {
   _connection: ConnectionInterface;
@@ -16,8 +17,14 @@ export default class Builder {
     return this;
   }
 
-  find() {}
-  first() {}
+  async find(id: any) {
+    // return tshis.where("id", "=", id);
+  }
+  async first() {
+    // if (isArray(this)) {
+    //   return this[0];
+    // }
+  }
 
   constructor(connection: ConnectionInterface) {
     this._connection = connection;
@@ -36,8 +43,8 @@ export default class Builder {
     return this._connection.query(this._from, this._select, this._where);
   }
 
-  async update() {
-    return this._connection.update(this._from, this._select, this._where);
+  async update(values: any) {
+    return this._connection.update(this._from, values, this._where);
   }
 
   async delete() {
