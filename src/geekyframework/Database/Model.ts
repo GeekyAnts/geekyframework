@@ -68,9 +68,9 @@ export default abstract class Model {
   }
 
   static fromJS(obj: any) {
-    let instance = new this();
-    instance.fill(obj);
-    return instance;
+    // let instance = new self();
+    // instance.fill(obj);
+    // return instance;
   }
 
   static fromJSArray(array: any) {
