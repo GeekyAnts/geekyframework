@@ -11,18 +11,11 @@ function getNewEntity() {
 function getNewEntityArray() {
   return [getNewEntity(), getNewEntity()];
 }
-const firebaseConfig = {
-  apiKey: "AIzaSyCnRxZIHrZQ9JyXxkp8bR9oPWsI84kNnVg",
-  authDomain: "geekyframework.firebaseapp.com",
-  databaseURL: "https://geekyframework.firebaseio.com",
-  projectId: "geekyframework",
-  storageBucket: "geekyframework.appspot.com",
-  messagingSenderId: "1028118111860"
-};
+
 export default class FirestoreConnection implements ConnectionInterface {
   database: any;
-  constructor() {
-    Firebase.initializeApp(firebaseConfig);
+  constructor(config: any) {
+    Firebase.initializeApp(config);
     this.database = Firebase.firestore();
   }
 
@@ -31,8 +24,8 @@ export default class FirestoreConnection implements ConnectionInterface {
       this.database
         .collection(entity)
         .add(values)
-        .then((docRef: any) => {
-          resolve(docRef.id);
+        .then(() => {
+          resolve(values);
         })
         .catch((error: any) => {
           console.log("error", error);
@@ -41,7 +34,6 @@ export default class FirestoreConnection implements ConnectionInterface {
     });
   }
 
-  // TODO: add typing for where
   async query(entity: any, select: any, where: any) {
     return new Promise((resolve, reject) => {
       let interimData = this.database.collection(entity);
@@ -88,7 +80,7 @@ export default class FirestoreConnection implements ConnectionInterface {
               this.database
                 .collection(entity)
                 .doc(doc.id)
-                .update()
+                .update(values)
                 .then((resp: any) => {
                   resolve(true);
                 })
@@ -124,7 +116,7 @@ export default class FirestoreConnection implements ConnectionInterface {
                 .collection(entity)
                 .doc(doc.id)
                 .delete()
-                .then((resp: any) => {
+                .then(() => {
                   resolve(true);
                 })
                 .catch((error: any) => {
