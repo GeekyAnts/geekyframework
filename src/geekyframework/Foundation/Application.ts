@@ -3,6 +3,7 @@ import Config from "../Config";
 import * as _ from "lodash";
 import ServiceProvider from "../Support/ServiceProvider";
 import { Provider } from "mobx-react";
+import Auth from "../Auth";
 
 export default class Application extends Container {
   readonly VERSION = "0.0.1";
@@ -131,7 +132,8 @@ export default class Application extends Container {
     _.forEach(
       {
         app: Application,
-        config: Config
+        config: Config,
+        auth: Auth
       },
       (alias, key) => {
         this.singleton(key, alias);

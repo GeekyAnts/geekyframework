@@ -5,9 +5,10 @@ import { Model } from "geekyframework";
 import { FirebaseConnection } from "geekyframework";
 import HomeScreen from "./Home";
 import PostScreen from "./Post";
+import Auth from "../geekyframework/Auth";
 class User extends Model {
-  static fillable = ["name"];
-  entity = "user";
+  static fillable = ["name", "id"];
+  static entity = "user";
 }
 class Router extends React.Component {
   state = {
@@ -19,24 +20,34 @@ class Router extends React.Component {
 
     this.user = new User();
 
-    let firebaseConnection = new FirebaseConnection({
-      apiKey: "AIzaSyCnRxZIHrZQ9JyXxkp8bR9oPWsI84kNnVg",
-      authDomain: "geekyframework.firebaseapp.com",
-      databaseURL: "https://geekyframework.firebaseio.com",
-      projectId: "geekyframework",
-      storageBucket: "geekyframework.appspot.com",
-      messagingSenderId: "1028118111860"
-    });
+    // let firebaseConnection = new FirebaseConnection({
+    //   apiKey: "AIzaSyCnRxZIHrZQ9JyXxkp8bR9oPWsI84kNnVg",
+    //   authDomain: "geekyframework.firebaseapp.com",
+    //   databaseURL: "https://geekyframework.firebaseio.com",
+    //   projectId: "geekyframework",
+    //   storageBucket: "geekyframework.appspot.com",
+    //   messagingSenderId: "1028118111860"
+    // });
 
-    this.user.setConnection(firebaseConnection);
+    // console.log(firebaseConnection, User.entity, "hello here");
+    // User.test();
+    // User.setConnection(firebaseConnection);
     this.user.name = "Suraj";
+    this.user.id = 5;
 
-    setTimeout(() => {
-      this.user.name = "something";
-      this.user.save();
-    }, 2000);
+    console.log(this.user.name, this.user.id, "user $$$");
+    this.user.save();
+
+    this.findUser();
   }
 
+  async findUser() {
+    // setTimeout(() => {
+    const user = await User.findById(5);
+    console.log(user, "user here");
+    // this.user.name = "something";
+    // }, 2000);
+  }
   render() {
     return (
       <React.Fragment>

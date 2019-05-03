@@ -15,8 +15,10 @@ function getNewEntityArray() {
 export default class FirestoreConnection implements ConnectionInterface {
   database: any;
   constructor(config: any) {
+    // if (Firebase.app.length === 0) {
     Firebase.initializeApp(config);
     this.database = Firebase.firestore();
+    // s}
   }
 
   async insert(entity: any, values: any) {
@@ -34,6 +36,7 @@ export default class FirestoreConnection implements ConnectionInterface {
   }
 
   async query(entity: any, select: any, where: any) {
+    console.log(entity, where, "hello 2222s");
     return new Promise((resolve, reject) => {
       let interimData = this.database.collection(entity);
       where.forEach((clause: any) => {

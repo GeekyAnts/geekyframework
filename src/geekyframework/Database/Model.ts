@@ -5,19 +5,20 @@ import FakeConnection from "./Connection/FakeConnection";
 import { User } from "../../Models";
 import ModelBuilder from "./ModelBuilder";
 import ConnectionInterface from "./Connection/ConnectionInterface";
-
 // import { observer } from "mobx-react";
+import FirebaseConnection from "../Database/Connection/FirebaseConnection";
+
+const defaultConfig = require("./../../config/model").default;
 export default abstract class Model {
   static entity: string | null = null;
-  modelBuilder: ModelBuilder;
-  connection: ConnectionInterface;
+  static connection: ConnectionInterface;
   [key: string]: any;
+  protected primaryKey = "id";
+  static modelBuilder: ModelBuilder;
+  static initialized: boolean = false;
 
   constructor() {
-    this.connection = new FakeConnection();
-    const builderObj = new Builder(this.connection);
-    this.modelBuilder = new ModelBuilder(Model, builderObj);
-    // this.initModelBuilder();
+    // this.connection = new FakeConnection();
     // const builderObj = new Builder(this.connection);
     // this.modelBuilder = new ModelBuilder(Model, builderObj);
 
@@ -41,43 +42,72 @@ export default abstract class Model {
     });
   }
 
-  initModelBuilder() {
-    const builderObj = new Builder(this.connection);
-    console.log(this.entity, "entity");
-    Model.entity = this.entity;
-    this.modelBuilder = new ModelBuilder(Model, builderObj);
-
-    // console.log(this.constructor, "hello entity");
-    // this.modelBuilder.from(Model.entity);
+  static getModelBuilder(): ModelBuilder {
+    if (this.initialized) {
+      this.initialize();
+    }
+    return this.modelBuilder;
   }
-  setConnection(connection: ConnectionInterface) {
+  getModelBuilder() {
+    if (!(this as any).constructor.initialized) {
+      (this as any).constructor.initialize();
+    }
+
+    return (this as any).constructor.modelBuilder;
+  }
+
+  static setConnection(connection: ConnectionInterface) {
     this.connection = connection;
-    this.initModelBuilder();
   }
   save() {
     const toJS = this.toJS();
-
-    console.log(toJS);
-    // console.log(await this.modelBuilder.insert(toJS));
-    return this.modelBuilder.insert(toJS);
+    return this.getModelBuilder().insert(toJS);
   }
 
-  static async findById(id: string) {
-    // if (this.entity) {
-    //   // console.log(Model.entity, this.entity, "entity ZZZ");
-    //   Model.entity = this.entity;
-    //   // let builder = new ModelBuilder(Model);
-    //   // console.log(builder.where, "builder here");
-    //   var obj = await builder.where("id", "=", id);
-    //   // console.log(JSON.stringify(obj), "hello");
-    //   return this.fromJS(obj);
-    // } else return null;
+  static initialize() {
+    if (!this.connection) {
+      //
+
+      const connectionName = defaultConfig.default;
+
+      if (connectionName === "firebase") {
+        this.connection = new FirebaseConnection(
+          defaultConfig.connections[connectionName]
+        );
+      } else {
+        throw new Error("Unable to establish connection");
+      }
+    }
+    const builderObj = new Builder(this.connection);
+    this.modelBuilder = new ModelBuilder(this, builderObj);
+    this.initialized = true;
   }
 
+  static findById(id: string) {
+    return this.getModelBuilder()
+      .where("id", "==", id)
+      .query();
+  }
+
+  static where(first: any, operator: any, second: any) {
+    return this.getModelBuilder().where(first, operator, second);
+  }
+  static query() {
+    return this.getModelBuilder().query();
+  }
+  static update(values: any) {
+    return this.getModelBuilder().update(values);
+  }
+  static insert(values: any) {
+    return this.getModelBuilder().insert(values);
+  }
+  static delete() {
+    return this.getModelBuilder().delete();
+  }
   static fromJS(obj: any) {
-    // let instance = new this();
-    // instance.fill(obj);
-    // return instance;
+    let instance = new (this as any)();
+    instance.fill(obj);
+    return instance;
   }
 
   static fromJSArray(array: any) {
@@ -90,23 +120,44 @@ export default abstract class Model {
   }
 
   fill(obj: any) {
-    // console.log(this.entity, "fillable here");
     for (var i in obj) {
-      this[i] = obj[i];
+      if (
+        (this as any).constructor.fillable &&
+        (this as any).constructor.fillable.indexOf(i) > -1
+      ) {
+        this[i] = obj[i];
+      }
     }
   }
 
   toJS() {
     let obj: any = {};
-    for (var i in this) {
-      if (
-        (this as any).constructor["fillable"] &&
-        (this as any).constructor["fillable"].indexOf(i) > -1
-      ) {
-        obj[i] = toJS(this[i]);
-      }
-    } // return fillable property
+    var fillable = (this as any).constructor["fillable"];
+
+    fillable.forEach((prop: any) => {
+      obj[prop] = toJS(this[prop]);
+    });
+
     return obj;
-    // console.log(obj, "obj here");
+    // }
+  }
+
+  /* Get the primary key for the model.
+   *
+   * @return string
+   */
+  getKeyName() {
+    return this.primaryKey;
+  }
+
+  /**
+   * Set the primary key for the model.
+   *
+   * @param  string  $key
+   * @return $this
+   */
+  setKeyName(key: string) {
+    this.primaryKey = key;
+    return this;
   }
 }
