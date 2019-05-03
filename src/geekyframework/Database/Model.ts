@@ -13,6 +13,7 @@ export default abstract class Model {
   static entity: string | null = null;
   static connection: ConnectionInterface;
   [key: string]: any;
+  protected primaryKey = "id";
   static modelBuilder: ModelBuilder;
   static initialized: boolean = false;
 
@@ -154,5 +155,24 @@ export default abstract class Model {
 
     return obj;
     // }
+  }
+
+  /* Get the primary key for the model.
+   *
+   * @return string
+   */
+  getKeyName() {
+    return this.primaryKey;
+  }
+
+  /**
+   * Set the primary key for the model.
+   *
+   * @param  string  $key
+   * @return $this
+   */
+  setKeyName(key: string) {
+    this.primaryKey = key;
+    return this;
   }
 }

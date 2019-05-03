@@ -5,6 +5,7 @@ import Model from "../geekyframework/Database/Model";
 import FirebaseConnection from "../geekyframework/Database/Connection/FirebaseConnection";
 import HomeScreen from "./Home";
 import PostScreen from "./Post";
+import Auth from "../geekyframework/Auth";
 class User extends Model {
   static fillable = ["name", "id"];
   static entity = "user";
