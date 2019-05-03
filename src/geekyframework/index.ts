@@ -13,3 +13,7 @@ export {
   Model,
   FirebaseConnection
 };
+
+module.exports = {
+  hello: "world"
+};

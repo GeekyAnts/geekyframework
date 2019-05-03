@@ -4,7 +4,9 @@
   "private": true,
   "dependencies": {
     "lodash": "^4.17.11",
+    "firebase": "^5.11.0",
     "mobx": "^5.9.4",
+    "mobx-react": "^5.4.3",
     "babel-register": "^6.22.0",
     "fs-extra": "^7.0.1",
     "vorpal": "^1.10.9",

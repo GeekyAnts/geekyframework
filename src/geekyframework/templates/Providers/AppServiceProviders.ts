@@ -1,4 +1,5 @@
-import { ServiceProvider } from "geekyframework";
+// real-import:import { ServiceProvider } from "geekyframework";
+import ServiceProvider from "../geekyframework/Support/ServiceProvider";
 
 export default class AppServiceProvider extends ServiceProvider {
   /**

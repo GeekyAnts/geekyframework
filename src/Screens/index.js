@@ -1,8 +1,9 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
-
-import { Model } from "geekyframework";
-import { FirebaseConnection } from "geekyframework";
+// real-import:import { Model } from "geekyframework";
+import Model from "../geekyframework/Database/Model";
+// real-import:import { FirebaseConnection } from "geekyframework";
+import FirebaseConnection from "../geekyframework/Database/Connection/FirebaseConnection";
 import HomeScreen from "./Home";
 import PostScreen from "./Post";
 import Auth from "../geekyframework/Auth";

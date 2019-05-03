@@ -28,6 +28,7 @@
     "resolveJsonModule": true
   },
   "exclude": [
+    "src/geekyframework/templates",
     "node_modules",
     "dist",
     "scripts",

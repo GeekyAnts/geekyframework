@@ -1,4 +1,5 @@
-import { env } from "geekyframework";
+// real-import:import { env } from "geekyframework";
+import { env } from "../geekyframework/helpers";
 import AppServiceProvider from "../Providers/AppServiceProviders";
 import ReactServiceProvider from "../Providers/ReactServiceProvider";
 
