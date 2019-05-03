@@ -1,4 +1,4 @@
-interface AuthenticatableInterface {
+export default interface AuthenticatableInterface {
   /**
    * Get the name of the unique identifier for the user.
    *

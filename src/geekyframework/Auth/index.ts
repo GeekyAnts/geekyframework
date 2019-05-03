@@ -27,7 +27,6 @@ export default class Auth {
   setAuthDriver(driver: FakeDriver) {
     this._driver = driver;
   }
-  attempt(credential: { [key: string]: any }[]) {}
   gaurd() {}
   check() {}
   logout() {

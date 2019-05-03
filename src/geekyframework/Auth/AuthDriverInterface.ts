@@ -1,4 +1,4 @@
-import Authenticatable from "./Authenticatable";
+import AuthenticatableInterface from "./AuthenticatableInterface";
 
 export default interface AuthDriverInterface {
   login(user: AuthenticatableInterface): void;

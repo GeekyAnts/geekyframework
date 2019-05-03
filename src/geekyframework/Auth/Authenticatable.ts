@@ -1,5 +1,6 @@
 import Model from "../Database/Model";
 import { isEmpty } from "lodash";
+import AuthenticatableInterface from "./AuthenticatableInterface";
 export default abstract class Authenticatable extends Model
   implements AuthenticatableInterface {
   protected rememberTokenName = "remember_token";
