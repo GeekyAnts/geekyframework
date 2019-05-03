@@ -19,18 +19,18 @@ class Router extends React.Component {
 
     this.user = new User();
 
-    let firebaseConnection = new FirebaseConnection({
-      apiKey: "AIzaSyCnRxZIHrZQ9JyXxkp8bR9oPWsI84kNnVg",
-      authDomain: "geekyframework.firebaseapp.com",
-      databaseURL: "https://geekyframework.firebaseio.com",
-      projectId: "geekyframework",
-      storageBucket: "geekyframework.appspot.com",
-      messagingSenderId: "1028118111860"
-    });
+    // let firebaseConnection = new FirebaseConnection({
+    //   apiKey: "AIzaSyCnRxZIHrZQ9JyXxkp8bR9oPWsI84kNnVg",
+    //   authDomain: "geekyframework.firebaseapp.com",
+    //   databaseURL: "https://geekyframework.firebaseio.com",
+    //   projectId: "geekyframework",
+    //   storageBucket: "geekyframework.appspot.com",
+    //   messagingSenderId: "1028118111860"
+    // });
 
     // console.log(firebaseConnection, User.entity, "hello here");
     // User.test();
-    User.setConnection(firebaseConnection);
+    // User.setConnection(firebaseConnection);
     this.user.name = "Suraj";
     this.user.id = 5;
 

@@ -5,8 +5,10 @@ import FakeConnection from "./Connection/FakeConnection";
 import { User } from "../../Models";
 import ModelBuilder from "./ModelBuilder";
 import ConnectionInterface from "./Connection/ConnectionInterface";
-
 // import { observer } from "mobx-react";
+import FirebaseConnection from "../Database/Connection/FirebaseConnection";
+
+const defaultConfig = require("./../../config/model").default;
 export default abstract class Model {
   static entity: string | null = null;
   static connection: ConnectionInterface;
@@ -62,6 +64,19 @@ export default abstract class Model {
   }
 
   static initialize() {
+    if (!this.connection) {
+      //
+
+      const connectionName = defaultConfig.default;
+
+      if (connectionName === "firebase") {
+        this.connection = new FirebaseConnection(
+          defaultConfig.connections[connectionName]
+        );
+      } else {
+        throw new Error("Unable to establish connection");
+      }
+    }
     const builderObj = new Builder(this.connection);
     this.modelBuilder = new ModelBuilder(this, builderObj);
     this.initialized = true;
