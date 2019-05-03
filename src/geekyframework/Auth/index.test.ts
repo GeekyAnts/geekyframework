@@ -8,6 +8,8 @@ const auth = new Auth();
 test("Login User", () => {
   var user = new User();
   user.name = "Rishab";
+  user.email = "rishab@gmail.com";
+  user.password = "hello";
   auth.login(user);
   expect(auth.user()).toBeDefined();
   expect(auth.user()!.name).toBe("Rishab");
@@ -15,5 +17,5 @@ test("Login User", () => {
 
 test("Logout User", () => {
   auth.logout();
-  expect(auth.logout()).toBeUndefined();
+  expect(auth.user()).toBeUndefined();
 });
