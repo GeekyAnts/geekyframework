@@ -9,7 +9,6 @@ import ConnectionInterface from "./Connection/ConnectionInterface";
 // import { observer } from "mobx-react";
 export default abstract class Model {
   static entity: string | null = null;
-  modelBuilder: ModelBuilder;
   connection: ConnectionInterface;
   [key: string]: any;
 
@@ -17,9 +16,6 @@ export default abstract class Model {
     this.connection = new FakeConnection();
     const builderObj = new Builder(this.connection);
     this.modelBuilder = new ModelBuilder(Model, builderObj);
-    // this.initModelBuilder();
-    // const builderObj = new Builder(this.connection);
-    // this.modelBuilder = new ModelBuilder(Model, builderObj);
 
     return new Proxy(this, {
       set: function(obj, prop: any, value, receiver: any) {
@@ -43,12 +39,8 @@ export default abstract class Model {
 
   initModelBuilder() {
     const builderObj = new Builder(this.connection);
-    console.log(this.entity, "entity");
     Model.entity = this.entity;
     this.modelBuilder = new ModelBuilder(Model, builderObj);
-
-    // console.log(this.constructor, "hello entity");
-    // this.modelBuilder.from(Model.entity);
   }
   setConnection(connection: ConnectionInterface) {
     this.connection = connection;
@@ -56,9 +48,6 @@ export default abstract class Model {
   }
   save() {
     const toJS = this.toJS();
-
-    console.log(toJS);
-    // console.log(await this.modelBuilder.insert(toJS));
     return this.modelBuilder.insert(toJS);
   }
 
@@ -75,9 +64,9 @@ export default abstract class Model {
   }
 
   static fromJS(obj: any) {
-    // let instance = new this();
-    // instance.fill(obj);
-    // return instance;
+    let instance = new (this as any)();
+    instance.fill(obj);
+    return instance;
   }
 
   static fromJSArray(array: any) {
@@ -90,9 +79,13 @@ export default abstract class Model {
   }
 
   fill(obj: any) {
-    // console.log(this.entity, "fillable here");
     for (var i in obj) {
-      this[i] = obj[i];
+      if (
+        (this as any).constructor["fillable"] &&
+        (this as any).constructor["fillable"].indexOf(i) > -1
+      ) {
+        this[i] = obj[i];
+      }
     }
   }
 
@@ -105,8 +98,7 @@ export default abstract class Model {
       ) {
         obj[i] = toJS(this[i]);
       }
-    } // return fillable property
-    return obj;
-    // console.log(obj, "obj here");
+      return obj;
+    }
   }
 }
