@@ -34,6 +34,7 @@ export default class FirestoreConnection implements ConnectionInterface {
   }
 
   async query(entity: any, select: any, where: any) {
+    console.log(entity, where, "hello 2222s");
     return new Promise((resolve, reject) => {
       let interimData = this.database.collection(entity);
       where.forEach((clause: any) => {

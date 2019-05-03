@@ -6,7 +6,7 @@ import FirebaseConnection from "../geekyframework/Database/Connection/FirebaseCo
 import HomeScreen from "./Home";
 import PostScreen from "./Post";
 class User extends Model {
-  static fillable = ["name"];
+  static fillable = ["name", "id"];
   entity = "user";
 }
 class Router extends React.Component {
@@ -30,13 +30,21 @@ class Router extends React.Component {
 
     this.user.setConnection(firebaseConnection);
     this.user.name = "Suraj";
+    this.user.id = 5;
 
-    setTimeout(() => {
-      this.user.name = "something";
-      this.user.save();
-    }, 2000);
+    console.log(this.user.name, this.user.id, "user");
+    this.user.save();
+
+    this.findUser();
   }
 
+  async findUser() {
+    // setTimeout(() => {
+    const user = await this.user.findById(5);
+    console.log(user, "user here");
+    // this.user.name = "something";
+    // }, 2000);
+  }
   render() {
     return (
       <>
