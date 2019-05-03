@@ -14,10 +14,11 @@ class Router extends React.Component {
     currentScreen: "post"
   };
   user;
+  users;
   constructor() {
     super();
 
-    this.user = new User();
+    // this.user = new User();
 
     // let firebaseConnection = new FirebaseConnection({
     //   apiKey: "AIzaSyCnRxZIHrZQ9JyXxkp8bR9oPWsI84kNnVg",
@@ -31,23 +32,41 @@ class Router extends React.Component {
     // console.log(firebaseConnection, User.entity, "hello here");
     // User.test();
     // User.setConnection(firebaseConnection);
-    this.user.name = "Suraj";
-    this.user.id = 5;
+    // this.user.name = "Suraj";
+    // this.user.id = 5;
 
-    console.log(this.user.name, this.user.id, "user $$$");
-    this.user.save();
-
+    // console.log(this.user.name, this.user.id, "user $$$");
+    // this.user.save();
+    //
     this.findUser();
   }
 
-  async findUser() {
+  findUser() {
     // setTimeout(() => {
-    const user = await User.findById(5);
-    console.log(user, "user here");
+    // this.setState({});
+    // this.user = users[0];
+    // console.log(users, "user here");
+    // setTimeout(() => {
+    //   console.log(this.users, "user here");
+    // }, 1000);
     // this.user.name = "something";
     // }, 2000);
   }
+  componentWillMount() {
+    this.users = User.findById(5);
+    this.user = new User();
+  }
+
+  insertUser = () => {
+    this.user.name = "Suraj";
+    this.user.id = 5;
+    console.log("save here");
+    this.user.save();
+  };
   render() {
+    console.log(this.users, "hello");
+    // this.users = User.findById(5);
+
     return (
       <>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -90,7 +109,16 @@ class Router extends React.Component {
             </div>{" "}
           </div>{" "}
         </nav>{" "}
-        <div style={{ height: "20px" }} /> <div> {this.user.name} </div>{" "}
+        <div style={{ height: "20px" }} />{" "}
+        <div>
+          {this.users ? this.users.loading + "__loading" : "maarsse jaane"}{" "}
+        </div>
+        <div>
+          {this.user && this.user.saving
+            ? "saving"
+            : "user saved _ " + this.user.name}
+        </div>
+        <button onClick={this.insertUser}>insert user</button>
         {this.state.currentScreen == "home" ? <HomeScreen /> : null}{" "}
         {this.state.currentScreen == "post" ? <PostScreen /> : null}{" "}
       </>
