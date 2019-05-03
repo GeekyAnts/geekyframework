@@ -1,8 +1,6 @@
 import { extendObservable, toJS } from "mobx";
 
 import Builder from "./Builder";
-import FakeConnection from "./Connection/FakeConnection";
-import { User } from "../../Models";
 import ModelBuilder from "./ModelBuilder";
 import ConnectionInterface from "./Connection/ConnectionInterface";
 // import { observer } from "mobx-react";

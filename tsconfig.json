@@ -1,34 +1,41 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
-    "outDir": "build/dist",
+    "baseUrl": ".",
+    "paths": {
+      "geekyframework": ["src/geekyframework"]
+    },
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "outDir": "./dist",
     "module": "esnext",
     "target": "es5",
     "lib": ["es6", "dom"],
     "sourceMap": true,
-    "allowJs": true,
+    "allowJs": false,
     "jsx": "react",
     "moduleResolution": "node",
     "rootDir": "src",
     "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noImplicitAny": true,
-    "importHelpers": true,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": false
-  },
-  "paths": {
-    "geekyframework": ["src/geekyframework"]
+    "noUnusedLocals": false,
+    "skipLibCheck": true,
+    "allowUnreachableCode": true,
+    "resolveJsonModule": true
   },
   "exclude": [
     "node_modules",
-    "build",
+    "dist",
     "scripts",
-    "acceptance-tests",
+    "config",
     "webpack",
     "jest",
-    "src/setupTests.ts"
+    "build",
+    "src/__tests__",
+    "*/**/__mocks__"
   ]
 }

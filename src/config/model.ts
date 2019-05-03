@@ -1,5 +1,5 @@
-import { env } from "../geekyframework";
-
+import { env } from "geekyframework";
+console.log(env, "env hello123");
 export default {
   default: env("DB_CONNECTION", "firebase"),
   connections: {
