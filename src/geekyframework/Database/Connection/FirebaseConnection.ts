@@ -28,7 +28,6 @@ export default class FirestoreConnection implements ConnectionInterface {
           resolve(values);
         })
         .catch((error: any) => {
-          console.log("error", error);
           reject(error);
         });
     });
@@ -75,20 +74,24 @@ export default class FirestoreConnection implements ConnectionInterface {
       interimData
         .get()
         .then((querySnapshot: Firebase.firestore.QuerySnapshot) => {
-          querySnapshot.forEach(
-            (doc: Firebase.firestore.QueryDocumentSnapshot) => {
-              this.database
-                .collection(entity)
-                .doc(doc.id)
-                .update(values)
-                .then((resp: any) => {
-                  resolve(true);
-                })
-                .catch((error: any) => {
-                  reject(error);
-                });
-            }
-          );
+          if (querySnapshot.docs.length) {
+            querySnapshot.forEach(
+              (doc: Firebase.firestore.QueryDocumentSnapshot) => {
+                this.database
+                  .collection(entity)
+                  .doc(doc.id)
+                  .update(values)
+                  .then((resp: any) => {
+                    resolve(doc.data());
+                  })
+                  .catch((error: any) => {
+                    reject(error);
+                  });
+              }
+            );
+          } else {
+            reject("Entry not found");
+          }
         })
         .catch((error: any) => {
           console.log("error", error);
@@ -110,20 +113,24 @@ export default class FirestoreConnection implements ConnectionInterface {
       interimData
         .get()
         .then((querySnapshot: Firebase.firestore.QuerySnapshot) => {
-          querySnapshot.forEach(
-            (doc: Firebase.firestore.QueryDocumentSnapshot) => {
-              this.database
-                .collection(entity)
-                .doc(doc.id)
-                .delete()
-                .then(() => {
-                  resolve(true);
-                })
-                .catch((error: any) => {
-                  reject(error);
-                });
-            }
-          );
+          if (querySnapshot.docs.length) {
+            querySnapshot.forEach(
+              (doc: Firebase.firestore.QueryDocumentSnapshot) => {
+                this.database
+                  .collection(entity)
+                  .doc(doc.id)
+                  .delete()
+                  .then(() => {
+                    resolve(doc.data());
+                  })
+                  .catch((error: any) => {
+                    reject(error);
+                  });
+              }
+            );
+          } else {
+            reject("No Match found");
+          }
         })
         .catch((error: any) => {
           console.log("error", error);

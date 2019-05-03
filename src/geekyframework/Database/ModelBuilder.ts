@@ -2,16 +2,21 @@ import Model from "./Model";
 import Builder from "./Builder";
 
 export default class ModelBuilder {
-  ModelClass: { new (): Model };
+  // ModelClass: { new (): Model };
+  ModelClass: any;
   builder: Builder;
-  constructor(ModelClass: { new (): Model }, builder: Builder) {
+  constructor(ModelClass: any, builder: Builder) {
     // super(connection);
     this.ModelClass = ModelClass;
     this.builder = builder;
-    this.builder.from(ModelClass.entity);
+    console.log("entity", (ModelClass as any).entity);
+    this.builder.from((ModelClass as any).entity);
 
     // console.log(ModelClass.entity, "entity");
   }
+  // from(entity: any) {
+  //   this.builder.from(entity);
+  // }
   where(first: any, operator: any, second: any) {
     this.builder.where(first, operator, second);
     return this;
