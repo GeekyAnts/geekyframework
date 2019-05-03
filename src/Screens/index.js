@@ -2,13 +2,13 @@ import React from "react";
 import { inject, observer } from "mobx-react";
 
 import Model from "../geekyframework/Database/Model";
-import FirestoreConnection from "../geekyframework/Database/Connection/Firestore";
+import FirebaseConnection from "../geekyframework/Database/Connection/FirebaseConnection";
 import HomeScreen from "./Home";
 import PostScreen from "./Post";
 import Auth from "../geekyframework/Auth";
 class User extends Model {
-  static fillable = ["name"];
-  entity = "user";
+  static fillable = ["name", "id"];
+  static entity = "user";
 }
 class Router extends React.Component {
   state = {
@@ -20,35 +20,45 @@ class Router extends React.Component {
 
     this.user = new User();
 
-    let firebaseConnection = new FirestoreConnection({
-      apiKey: "AIzaSyCnRxZIHrZQ9JyXxkp8bR9oPWsI84kNnVg",
-      authDomain: "geekyframework.firebaseapp.com",
-      databaseURL: "https://geekyframework.firebaseio.com",
-      projectId: "geekyframework",
-      storageBucket: "geekyframework.appspot.com",
-      messagingSenderId: "1028118111860"
-    });
+    // let firebaseConnection = new FirebaseConnection({
+    //   apiKey: "AIzaSyCnRxZIHrZQ9JyXxkp8bR9oPWsI84kNnVg",
+    //   authDomain: "geekyframework.firebaseapp.com",
+    //   databaseURL: "https://geekyframework.firebaseio.com",
+    //   projectId: "geekyframework",
+    //   storageBucket: "geekyframework.appspot.com",
+    //   messagingSenderId: "1028118111860"
+    // });
 
-    this.user.setConnection(firebaseConnection);
+    // console.log(firebaseConnection, User.entity, "hello here");
+    // User.test();
+    // User.setConnection(firebaseConnection);
     this.user.name = "Suraj";
+    this.user.id = 5;
 
-    setTimeout(() => {
-      this.user.name = "something";
-      this.user.save();
-    }, 2000);
+    console.log(this.user.name, this.user.id, "user $$$");
+    this.user.save();
+
+    this.findUser();
   }
 
+  async findUser() {
+    // setTimeout(() => {
+    const user = await User.findById(5);
+    console.log(user, "user here");
+    // this.user.name = "something";
+    // }, 2000);
+  }
   render() {
     return (
       <>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
           <div class="container">
             <a class="navbar-brand" href="#">
-              Geekyframework
-            </a>
+              Geekyframework{" "}
+            </a>{" "}
             <button class="navbar-toggler" type="button">
               <span class="navbar-toggler-icon" />
-            </button>
+            </button>{" "}
             <div class="collapse navbar-collapse">
               <ul class="navbar-nav">
                 <li
@@ -65,26 +75,25 @@ class Router extends React.Component {
                     href="#"
                     onClick={() => this.setState({ currentScreen: "home" })}
                   >
-                    Home <span class="sr-only">(current)</span>
-                  </a>
-                </li>
+                    Home <span class="sr-only"> (current) </span>{" "}
+                  </a>{" "}
+                </li>{" "}
                 <li class="nav-item">
                   <a
                     class="nav-link"
                     href="#"
                     onClick={() => this.setState({ currentScreen: "post" })}
                   >
-                    Post
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </nav>
-        <div style={{ height: "20px" }} />
-        <div> {this.user.name}</div>
-        {this.state.currentScreen == "home" ? <HomeScreen /> : null}
-        {this.state.currentScreen == "post" ? <PostScreen /> : null}
+                    Post{" "}
+                  </a>{" "}
+                </li>{" "}
+              </ul>{" "}
+            </div>{" "}
+          </div>{" "}
+        </nav>{" "}
+        <div style={{ height: "20px" }} /> <div> {this.user.name} </div>{" "}
+        {this.state.currentScreen == "home" ? <HomeScreen /> : null}{" "}
+        {this.state.currentScreen == "post" ? <PostScreen /> : null}{" "}
       </>
     );
   }

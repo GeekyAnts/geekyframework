@@ -1,18 +1,16 @@
 import Model from "./Model";
 import Builder from "./Builder";
 
+// var a: { new (): Model };
+// var b = typeof Model;
 export default class ModelBuilder {
   // ModelClass: { new (): Model };
-  ModelClass: any;
+  ModelClass: typeof Model;
   builder: Builder;
-  constructor(ModelClass: any, builder: Builder) {
-    // super(connection);
+  constructor(ModelClass: typeof Model, builder: Builder) {
     this.ModelClass = ModelClass;
     this.builder = builder;
-    console.log("entity", (ModelClass as any).entity);
     this.builder.from((ModelClass as any).entity);
-
-    // console.log(ModelClass.entity, "entity");
   }
   // from(entity: any) {
   //   this.builder.from(entity);
@@ -23,6 +21,7 @@ export default class ModelBuilder {
   }
 
   async find(id: any) {
+    ``;
     // let js = await this.builder.find(id);
     // return this.ModelClass.fromJS(js);
   }
