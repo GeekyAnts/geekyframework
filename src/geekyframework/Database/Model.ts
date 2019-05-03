@@ -12,6 +12,7 @@ export default abstract class Model {
   modelBuilder: ModelBuilder;
   connection: ConnectionInterface;
   [key: string]: any;
+  protected primaryKey = "id";
 
   constructor() {
     this.connection = new FakeConnection();
@@ -108,5 +109,24 @@ export default abstract class Model {
     } // return fillable property
     return obj;
     // console.log(obj, "obj here");
+  }
+
+  /* Get the primary key for the model.
+   *
+   * @return string
+   */
+  getKeyName() {
+    return this.primaryKey;
+  }
+
+  /**
+   * Set the primary key for the model.
+   *
+   * @param  string  $key
+   * @return $this
+   */
+  setKeyName(key: string) {
+    this.primaryKey = key;
+    return this;
   }
 }
