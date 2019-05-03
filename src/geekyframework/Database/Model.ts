@@ -1,4 +1,4 @@
-import { extendObservable, toJS } from "mobx";
+import { extendObservable, toJS, observable } from "mobx";
 
 import Builder from "./Builder";
 import FakeConnection from "./Connection/FakeConnection";
@@ -17,14 +17,14 @@ export default abstract class Model {
   static modelBuilder: ModelBuilder;
   static initialized: boolean = false;
 
-  constructor() {
-    // this.connection = new FakeConnection();
-    // const builderObj = new Builder(this.connection);
-    // this.modelBuilder = new ModelBuilder(Model, builderObj);
+  @observable saving: boolean = false;
+  @observable deleting: boolean = false;
+  @observable updating: boolean = false;
 
+  constructor() {
     return new Proxy(this, {
       set: function(obj, prop: any, value, receiver: any) {
-        if (!obj[prop]) {
+        if (typeof obj[prop] === "undefined") {
           extendObservable(obj, { [prop]: value });
         } else {
           obj[prop] = value;
@@ -43,9 +43,10 @@ export default abstract class Model {
   }
 
   static getModelBuilder(): ModelBuilder {
-    if (this.initialized) {
+    if (!this.initialized) {
       this.initialize();
     }
+
     return this.modelBuilder;
   }
   getModelBuilder() {
@@ -60,11 +61,25 @@ export default abstract class Model {
     this.connection = connection;
   }
   save() {
+    this.saving = true;
     const toJS = this.toJS();
-    return this.getModelBuilder().insert(toJS);
+    const resultSet = this.getModelBuilder().insert(toJS);
+    resultSet.promise
+      .then((data: any) => {
+        // console.log("hello here");
+        this.saving = false;
+      })
+      .catch((Error: any) => {
+        this.saving = false;
+      });
+
+    // console.log(resultSet, "result set");
+    return resultSet;
   }
 
   static initialize() {
+    // console.log("connection hello here", this.connection);
+
     if (!this.connection) {
       const connectionName = defaultConfig.default;
 
