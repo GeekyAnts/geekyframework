@@ -48,10 +48,14 @@ export default abstract class Model {
   }
   save() {
     const toJS = this.toJS();
+
+    console.log(toJS, "hello to js user");
     return this.modelBuilder.insert(toJS);
   }
 
-  static async findById(id: string) {
+  async findById(id: string) {
+    return this.modelBuilder.where("id", "==", id).query();
+
     // if (this.entity) {
     //   // console.log(Model.entity, this.entity, "entity ZZZ");
     //   Model.entity = this.entity;
@@ -91,14 +95,15 @@ export default abstract class Model {
 
   toJS() {
     let obj: any = {};
-    for (var i in this) {
-      if (
-        (this as any).constructor["fillable"] &&
-        (this as any).constructor["fillable"].indexOf(i) > -1
-      ) {
-        obj[i] = toJS(this[i]);
-      }
-      return obj;
-    }
+
+    // for (var i in this) {
+    var fillable = (this as any).constructor["fillable"];
+
+    fillable.forEach((prop: any) => {
+      obj[prop] = toJS(this[prop]);
+    });
+
+    return obj;
+    // }
   }
 }
