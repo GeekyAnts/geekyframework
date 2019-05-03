@@ -1,8 +1,8 @@
 import React from "react";
 import { inject, observer } from "mobx-react";
 
-import Model from "geekyframework/Database/Model";
-import FirebaseConnection from "geekyframework/Database/Connection/FirebaseConnection";
+import { Model } from "geekyframework";
+import { FirebaseConnection } from "geekyframework";
 import HomeScreen from "./Home";
 import PostScreen from "./Post";
 class User extends Model {
@@ -39,7 +39,7 @@ class Router extends React.Component {
 
   render() {
     return (
-      <>
+      <React.Fragment>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
           <div class="container">
             <a class="navbar-brand" href="#">
@@ -83,7 +83,7 @@ class Router extends React.Component {
         <div style={{ height: "20px" }} /> <div> {this.user.name} </div>{" "}
         {this.state.currentScreen == "home" ? <HomeScreen /> : null}{" "}
         {this.state.currentScreen == "post" ? <PostScreen /> : null}{" "}
-      </>
+      </React.Fragment>
     );
   }
 }

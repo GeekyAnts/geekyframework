@@ -1,11 +1,11 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
 
 import { Provider } from "mobx-react";
 import Screens from "../Screens";
 
-import ServiceProvider from "../geekyframework/Support/ServiceProvider";
-import { app } from "../geekyframework/helpers";
+import { ServiceProvider } from "geekyframework";
+import { app } from "geekyframework";
 
 export default class ReactServiceProvider extends ServiceProvider {
   /**
@@ -13,7 +13,7 @@ export default class ReactServiceProvider extends ServiceProvider {
    *
    * @return void
    */
-  public register() {}
+  public register() { }
 
   /**
    * Bootstrap any application services.
