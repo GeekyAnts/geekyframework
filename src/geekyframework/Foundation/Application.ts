@@ -4,6 +4,8 @@ import * as _ from "lodash";
 import ServiceProvider from "../Support/ServiceProvider";
 import { Provider } from "mobx-react";
 import Auth from "../Auth";
+import FakeDriver from "../Auth/FakeDriver";
+import FirebaseDriver from "../Auth/FirebaseDriver";
 
 export default class Application extends Container {
   readonly VERSION = "0.0.1";
@@ -133,13 +135,13 @@ export default class Application extends Container {
       {
         app: Application,
         config: Config,
+        "auth.driver": FirebaseDriver,
         auth: Auth
       },
       (alias, key) => {
         this.singleton(key, alias);
       }
     );
-
     this.get("config").set("__framework", "Geekyframework");
   }
 

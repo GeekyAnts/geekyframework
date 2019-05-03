@@ -66,8 +66,6 @@ export default abstract class Model {
 
   static initialize() {
     if (!this.connection) {
-      //
-
       const connectionName = defaultConfig.default;
 
       if (connectionName === "firebase") {

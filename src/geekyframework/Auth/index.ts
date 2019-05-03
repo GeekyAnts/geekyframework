@@ -1,20 +1,31 @@
 import Authenticatable from "./Authenticatable";
 import FakeDriver from "./FakeDriver";
 import AuthDriverInterface from "./AuthDriverInterface";
-
+import { app } from "../helpers";
 export default class Auth {
   private _user: Authenticatable | undefined;
   private _driver: AuthDriverInterface | undefined;
 
-  constructor() {
-    this._driver = new FakeDriver();
-  }
   user() {
     return this._user;
   }
   id() {}
 
+  initalizedAuthDriver() {
+    const appInstance: any = app();
+    if (this._driver) {
+      return;
+    } else {
+      const authDriver = appInstance.get("auth.driver");
+      if (authDriver) {
+        this._driver = authDriver;
+      } else {
+        this._driver = new FakeDriver();
+      }
+    }
+  }
   login(user: Authenticatable, remember: boolean = false) {
+    this.initalizedAuthDriver();
     if (!this._driver) {
       throw new Error("Connection is not intialized");
     }
@@ -30,6 +41,7 @@ export default class Auth {
   gaurd() {}
   check() {}
   logout() {
+    this.initalizedAuthDriver();
     if (!this._driver) {
       throw new Error("Connection is not intialized");
     }
