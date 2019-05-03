@@ -1,4 +1,5 @@
 // import yeoman from 'yeoman-environment';
+// @ts-ignore
 const _ = require("lodash");
 const fs = require("fs-extra");
 const ora = require("ora");

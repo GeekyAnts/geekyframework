@@ -1,4 +1,4 @@
-import { Application } from "./geekyframework";
+import { Application } from "geekyframework";
 
 const app = new Application();
 

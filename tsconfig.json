@@ -16,5 +16,8 @@
     "noEmit": true,
     "jsx": "preserve"
   },
+  "paths": {
+    "geekyframework": ["src/geekyframework"]
+  },
   "include": ["src"]
 }

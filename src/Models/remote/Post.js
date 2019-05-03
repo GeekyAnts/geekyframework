@@ -1,3 +1,3 @@
-import RemoteModel from "../../geekyframework";
+import RemoteModel from "geekyframework";
 
 export default {};
