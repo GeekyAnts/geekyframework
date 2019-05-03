@@ -15,8 +15,10 @@ function getNewEntityArray() {
 export default class FirestoreConnection implements ConnectionInterface {
   database: any;
   constructor(config: any) {
+    // if (Firebase.app.length === 0) {
     Firebase.initializeApp(config);
     this.database = Firebase.firestore();
+    // s}
   }
 
   async insert(entity: any, values: any) {

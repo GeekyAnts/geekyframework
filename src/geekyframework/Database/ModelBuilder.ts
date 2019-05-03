@@ -1,6 +1,8 @@
 import Model from "./Model";
 import Builder from "./Builder";
 
+// var a: { new (): Model };
+// var b = typeof Model;
 export default class ModelBuilder {
   // ModelClass: { new (): Model };
   ModelClass: typeof Model;

@@ -7,7 +7,7 @@ import HomeScreen from "./Home";
 import PostScreen from "./Post";
 class User extends Model {
   static fillable = ["name", "id"];
-  entity = "user";
+  static entity = "user";
 }
 class Router extends React.Component {
   state = {
@@ -28,11 +28,13 @@ class Router extends React.Component {
       messagingSenderId: "1028118111860"
     });
 
-    this.user.setConnection(firebaseConnection);
+    // console.log(firebaseConnection, User.entity, "hello here");
+    // User.test();
+    User.setConnection(firebaseConnection);
     this.user.name = "Suraj";
     this.user.id = 5;
 
-    console.log(this.user.name, this.user.id, "user");
+    console.log(this.user.name, this.user.id, "user $$$");
     this.user.save();
 
     this.findUser();
@@ -40,7 +42,7 @@ class Router extends React.Component {
 
   async findUser() {
     // setTimeout(() => {
-    const user = await this.user.findById(5);
+    const user = await User.findById(5);
     console.log(user, "user here");
     // this.user.name = "something";
     // }, 2000);
